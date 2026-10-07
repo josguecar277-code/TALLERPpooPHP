@@ -16,12 +16,10 @@ echo "<body>";
 
 echo "<h1>Registro de personas</h1>";
 
-echo "<form action='indexIE.php' method='POST'>";
+echo "<form action='index5.php' method='POST'>";
 
 
-    echo "<form action='indexIE.php' method='POST'>";
-
-        echo "<h2>Estudiantes</h2>";
+    echo "<h2>Estudiantes</h2>";
 
         for ($i = 0; $i < $cantidadEstudiantes; $i++) {
             $numero = $i + 1;
@@ -110,7 +108,7 @@ echo "<form action='indexIE.php' method='POST'>";
         echo "Posición del docente: ";
         echo "<input type='number' name='cursos[$i][docente]' min='0' required>";
 
-        echo "<p>Ejemplo: si desea asignar el primer docente, escriba 0.</p>";
+       
 
         echo "<br><br>";
     }

@@ -1,13 +1,14 @@
 <?php
 
 class Persona {
-    protected string $nombre;
-    protected string $documento;
-    protected string $correo;
 
-    private static int $totalPersonas = 0;
+    protected $nombre;
+    protected $documento;
+    protected $correo;
 
-    public function __construct(string $nombre, string $documento, string $correo) {
+    private static $totalPersonas = 0;
+
+    public function __construct($nombre, $documento, $correo) {
         $this->nombre = $nombre;
         $this->documento = $documento;
         $this->correo = $correo;
@@ -15,55 +16,33 @@ class Persona {
         self::$totalPersonas++;
     }
 
-    public function mostrarInfo(): void {
+    public function mostrarInfo() {
         echo "Nombre: " . $this->nombre . "<br>";
         echo "Documento: " . $this->documento . "<br>";
         echo "Correo: " . $this->correo . "<br>";
     }
 
-    public function validarCorreo(): bool {
-        $tieneArroba = false;
-        $tienePunto = false;
-
-        for ($i = 0; $i < ($this->correo); $i++) {
-            if ($this->correo[$i] == "@") {
-                $tieneArroba = true;
-            }
-            
-            if ($this->correo[$i] == ".") {
-                $tienePunto = true;
-            }
-        }
-
-        if ($tieneArroba && $tienePunto) {
-            return true;
-        }
-        return false;
+    public function validarCorreo() {
+        return filter_var($this->correo, FILTER_VALIDATE_EMAIL) !== false;
     }
 
-    public static function validarDocumento(string $documento): bool {
-        for ($i = 0; $i < ($documento); $i++) {
-            
-            if ($documento[$i] < '0' || $documento[$i] > '9') {
-                return false;
-            }
-        }
-        return true;
-    } 
+    public static function validarDocumento($documento) {
+        return ctype_digit($documento);
+    }
 
-    public static function getTotalPersonas(): int {
+    public static function getTotalPersonas() {
         return self::$totalPersonas;
     }
-    
-    public function getNombre(): string {
+
+    public function getNombre() {
         return $this->nombre;
     }
 
-    public function getDocumento(): string {
+    public function getDocumento() {
         return $this->documento;
     }
 
-    public function getCorreo(): string {
+    public function getCorreo() {
         return $this->correo;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/Cliente.php';
+
 class Persona extends Cliente {
 
     private $cedula;

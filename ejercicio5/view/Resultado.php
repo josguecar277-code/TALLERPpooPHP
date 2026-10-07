@@ -1,74 +1,76 @@
 <?php
 
-$estudiantes = $datos["estudiantes"];
-$docentes = $datos["docentes"];
-$admin =$datos["administrativos"];
-$cursos = $datos["cursos"];
+$estudiantes = $datos['estudiantes'];
+$docentes = $datos['docentes'];
+$administrativos = $datos['administrativos'];
+$cursos = $datos['cursos'];
 
-echo "<!DOCTYPE html>";
-echo "<html lang='es'>";
-echo "<head>";
-echo "<meta charset='UTF-8'>";
-echo "<title>Resultados Académicos</title>";
-echo "</head>";
-echo "<body>";
+?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Resumen de la institución</title>
+</head>
+<body>
 
-echo "<h1>Estudiantes</h1>";
+<h1>Resumen de la información registrada</h1>
 
-foreach ($estudiantes as $estudiante) {
+<h2>Estudiantes</h2>
+<?php foreach ($estudiantes as $estudiante): ?>
+    <p>
+        Nombre: <?php echo $estudiante->getNombre(); ?><br>
+        Documento: <?php echo $estudiante->getDocumento(); ?><br>
+        Correo: <?php echo $estudiante->getCorreo(); ?>
+    </p>
+<?php endforeach; ?>
 
-    echo "Nombre: " . $estudiante->getNombre() . "<br>";
+<h2>Docentes</h2>
+<?php foreach ($docentes as $docente): ?>
+    <p>
+        Nombre: <?php echo $docente->getNombre(); ?><br>
+        Documento: <?php echo $docente->getDocumento(); ?><br>
+        Correo: <?php echo $docente->getCorreo(); ?>
+    </p>
+<?php endforeach; ?>
 
-    echo "Documento: " . $estudiante->getDocumento() . "<br>";
+<h2>Administrativos</h2>
+<?php foreach ($administrativos as $administrativo): ?>
+    <p>
+        Nombre: <?php echo $administrativo->getNombre(); ?><br>
+        Documento: <?php echo $administrativo->getDocumento(); ?><br>
+        Correo: <?php echo $administrativo->getCorreo(); ?>
+    </p>
+<?php endforeach; ?>
 
-    echo "Correo: " . $estudiante->getCorreo() . "<br><br>";
+<h2>Cursos</h2>
+<?php foreach ($cursos as $curso): ?>
+    <p>
+        Nombre del curso: <?php echo $curso->getNombre(); ?><br>
+        Código: <?php echo $curso->getCodigo(); ?>
+    </p>
 
-    echo "<br><br>";
-}
+    <?php if ($curso->getDocente() !== null): ?>
+        <p>
+            Docente asignado: <?php echo $curso->getDocente()->getNombre(); ?>
+        </p>
+    <?php endif; ?>
 
-echo "<h1>Docentes</h1>";
+    <h3>Promedios</h3>
+    <?php foreach ($estudiantes as $estudiante): ?>
+        <p>
+            <?php echo $estudiante->getNombre(); ?>:
+            <?php echo round($estudiante->calcularPromedio($curso->getCodigo()), 2); ?>
+        </p>
+    <?php endforeach; ?>
 
-foreach ($docentes as $docente) {
+    <hr>
+<?php endforeach; ?>
 
-    echo "Nombre: " . $docente->getNombre() . "<br>";
+<h2>Total de personas registradas</h2>
+<p><?php echo Persona::getTotalPersonas(); ?></p>
 
-    echo "Documento: " . $docente->getDocumento() . "<br>";
+<a href="index5.php">Volver</a>
 
-    echo "Correo: " . $docente->getCorreo() . "<br>";
-
-    echo "<br><br>";
-}
-
-echo "<h1>Personal administrativo</h1>";
-
-foreach ($admin as $administrativo) {
-
-    echo "Nombre: " . $administrativo->getNombre() . "<br>";
-
-    echo "Documento: " . $administrativo->getDocumento() . "<br>";
-
-    echo "Correo: " . $administrativo->getCorreo() . "<br>";
-
-    echo "<br><br>";
-}
-
-echo "<h1>Cursos</h1>";
-
-foreach ($cursos as $curso) {
-
-    echo "Nombre: " . $curso->getNombre() . "<br>";
-
-    echo "Código: " . $curso->getCodigo() . "<br>";
-
-    echo "Promedio: " . round($estudiante->calcularPromedio($curso->getCodigo()), 2) . "<br><br>";
-
-    echo "<br><br>";
-}
-
-echo "<h1>Total de personas</h1>";
-
-echo "<p>" . Persona::getTotalPersonas() . "</p>";
-
-
-echo "</body>";
-echo "</html>";
+</body>
+</html>

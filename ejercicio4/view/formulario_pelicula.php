@@ -4,7 +4,17 @@ $cantidad = $_POST['cantidad'];
 
 ?>
 
- <form action="../controller/resultado4.php" method="post">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registar Peliculas</title>
+</head>
+<body>
+    <h2>Datos Peliculas</h2>
+
+ <form action="index4.php" method="post">
 <input type="hidden" name="cantidad" value="<?php echo $cantidad; ?>" >
 
 <?php for ($i = 1; $i <= $cantidad; $i++) { ?>
@@ -32,8 +42,9 @@ $cantidad = $_POST['cantidad'];
 <?php } ?>
 
 
-<button type="submit">Registrar películas</button>
-
-
+<button type="submit" name="registrar">Registrar películas</button>
 
  </form>
+
+ </body>
+</html>

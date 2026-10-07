@@ -2,93 +2,105 @@
 
 require_once __DIR__ . '/../model/Persona.php';
 require_once __DIR__ . '/../model/Estudiante.php';
-require_once __DIR__ . '/../model/Docente.php';
-require_once __DIR__ . '/../model/Admin.php';
 require_once __DIR__ . '/../model/Curso.php';
+require_once __DIR__ . '/../model/Admin.php';
+require_once __DIR__ . '/../model/Docente.php';
 
-class ControladorAcademico {
-    public function registrarPersonas(array $datos): array {
+class ControladorGestionAcademica {
+
+    public function crearPersonas($informacion) {
+
         $estudiantes = [];
         $docentes = [];
         $administrativos = [];
 
-        foreach ($datos["estudiantes"] as $dato) {
-            $estudiante = new Estudiante(
-                $dato["nombre"],
-                $dato["documento"],
-                $dato["correo"]
-            );
+        if (isset($informacion['estudiantes'])) {
+            foreach ($informacion['estudiantes'] as $persona) {
 
-            $estudiantes[] = $estudiante;
+                $estudiantes[] = new Estudiante(
+                    $persona['nombre'],
+                    $persona['documento'],
+                    $persona['correo']
+                );
+            }
         }
 
-        foreach ($datos["docentes"] as $dato) {
-            $docente = new Docente(
-                $dato["nombre"],
-                $dato["documento"],
-                $dato["correo"]
-            );
+        if (isset($informacion['docentes'])) {
+            foreach ($informacion['docentes'] as $persona) {
 
-            $docentes[] = $docente;
+                $docentes[] = new Docente(
+                    $persona['nombre'],
+                    $persona['documento'],
+                    $persona['correo']
+                );
+            }
         }
 
-        foreach ($datos["administrativos"] as $dato) {
-            $administrativo = new Admin(
-                $dato["nombre"],
-                $dato["documento"],
-                $dato["correo"]
-            );
+        if (isset($informacion['administrativos'])) {
+            foreach ($informacion['administrativos'] as $persona) {
 
-            $administrativos[] = $administrativo;
+                $administrativos[] = new Admin(
+                    $persona['nombre'],
+                    $persona['documento'],
+                    $persona['correo']
+                );
+            }
         }
 
         return [
-            "estudiantes" => $estudiantes,
-            "docentes" => $docentes,
-            "administrativos" => $administrativos
+            'estudiantes' => $estudiantes,
+            'docentes' => $docentes,
+            'administrativos' => $administrativos
         ];
     }
 
-    public function registrarCursos(array $datos, array $estudiantes, array $docentes): array {
-    
+    public function crearCursos($informacion, $estudiantes, $docentes) {
+
         $cursos = [];
 
-        foreach ($datos as $dato) {
+        foreach ($informacion as $cursoInfo) {
+
             $curso = new Curso(
-                $dato["codigo"],
-                $dato["nombre"]
+                $cursoInfo['codigo'],
+                $cursoInfo['nombre']
             );
 
-            $posicionDocente = $dato["docente"];
+            $posicionDocente = (int)$cursoInfo['docente'];
 
             if (isset($docentes[$posicionDocente])) {
                 $curso->asignarDocente($docentes[$posicionDocente]);
             }
 
-            if (isset($dato["estudiantes"])) {
-                foreach ($dato["estudiantes"] as $posicionEstudiante) {
-                    if (isset($estudiantes[$posicionEstudiante])) {
-                        $curso->agregarEstudiante($estudiantes[$posicionEstudiante]);
-                    }
-                }
-            }
-            
             $cursos[] = $curso;
         }
 
         return $cursos;
     }
 
-    
-    public function registrarNotas(array $notas, array $estudiantes, array $cursos): void {
-        foreach ($notas as $posicionEstudiante => $cursosEstudiante) {
-            foreach ($cursosEstudiante as $curso => $notasCurso) {
+    public function guardarNotas($notas, $estudiantes, $cursos) {
 
-            $posicionCurso = substr($curso, 5);
-            $codigoCurso = $cursos[$posicionCurso]->getCodigo();
-            
-                foreach ($notasCurso as $nota) {
-                    $estudiantes[$posicionEstudiante]->agregarNota($codigoCurso, $nota);
+        foreach ($notas as $posicionEstudiante => $notasCursos) {
+
+            if (!isset($estudiantes[$posicionEstudiante])) {
+                continue;
+            }
+
+            foreach ($notasCursos as $nombreCurso => $listaNotas) {
+
+                $posicionCurso = (int)str_replace("curso", "", $nombreCurso);
+
+                if (!isset($cursos[$posicionCurso])) {
+                    continue;
+                }
+
+                $codigoCurso = $cursos[$posicionCurso]->getCodigo();
+
+                foreach ($listaNotas as $nota) {
+
+                    $estudiantes[$posicionEstudiante]->agregarNota(
+                        $codigoCurso,
+                        (float)$nota
+                    );
                 }
             }
         }

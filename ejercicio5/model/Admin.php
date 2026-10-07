@@ -1,14 +1,15 @@
 <?php
 
 class Admin extends Persona {
-    
-    public function gestionarProceso(string $proceso): void {
-        echo "Proceso académico gestionado: " . $proceso . "<br>";
+
+    public function gestionarProceso($proceso) {
+        echo "Proceso académico : " . $proceso . "<br>";
     }
 
-    public function mostrarInfo(): void {
+    public function mostrarInfo() {
+
         parent::mostrarInfo();
 
-        echo "Tipo: Personal administrativo <br>";
+        echo "Tipo: Personal Administrativo <br>";
     }
 }

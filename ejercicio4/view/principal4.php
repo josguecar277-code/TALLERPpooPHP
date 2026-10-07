@@ -6,10 +6,11 @@
     <title>Peliculas</title>
 </head>
 <body>
-    <form action="formulario_pelicula.php" method="post">
+    <h2>Registro de Peliculas</h2>
+    <form action="index4.php" method="post">
     <label for="cantidad">¿Cuántas películas desea registrar?</label>
-    <input type="number" id="cantidad" name="cantidad">
-    <button type="submit">Continuar</button>
+    <input type="number" id="cantidad" name="cantidad" min = "1" required   >
+    <button type="submit" name="crear">Continuar</button>
 </form>
     
 </body>
